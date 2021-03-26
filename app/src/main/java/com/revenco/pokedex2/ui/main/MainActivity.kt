@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         onTransformationStartContainer()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i("MainActivity===>", this.toString())
         val mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         mainViewModel.fetchPokemonList(page = 0, isLoading = true, isLoadMore = false)
         mainRA.loadMoreModule.loadMoreView = SimpleLoadMoreView()

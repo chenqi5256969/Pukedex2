@@ -6,6 +6,7 @@ import com.revenco.pokedex2.base.LiveCoroutinesViewModel
 import com.revenco.pokedex2.model.Pokemon
 import com.revenco.pokedex2.repository.MainRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -16,7 +17,7 @@ class MainViewModel @ViewModelInject constructor(
     var uiState = MutableLiveData<UiModel>()
 
     fun fetchPokemonList(page: Int, isLoading: Boolean = true, isLoadMore: Boolean = false) {
-        viewModelScope.launch(Dispatchers.Main) {
+        liveOnUICoroutines {
             emitUiState(showLoading = isLoading, showLoadMore = isLoadMore)
             mainRepository.fetchPokemonList(page, onSuccess = {
             }, onError = { msg ->
