@@ -16,8 +16,8 @@
 
 
 
-![https://github.com/chenqi5256969/Pukedex2/blob/master/preview/Screenshot_2021-03-26-15-25-47-716_com.revenco.pukedex2.png]()
 
+https://github.com/chenqi5256969/Pukedex2/blob/master/preview/Screenshot_2021-03-26-15-25-47-716_com.revenco.pukedex2.png
 
 
 
