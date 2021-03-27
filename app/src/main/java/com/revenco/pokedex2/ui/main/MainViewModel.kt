@@ -1,53 +1,31 @@
 package com.revenco.pokedex2.ui.main
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
 import com.revenco.pokedex2.base.LiveCoroutinesViewModel
 import com.revenco.pokedex2.model.Pokemon
+import com.revenco.pokedex2.model.base.PukdexResult
 import com.revenco.pokedex2.repository.MainRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class MainViewModel @ViewModelInject constructor(
     private val mainRepository: MainRepository
 ) : LiveCoroutinesViewModel() {
 
-    var uiState = MutableLiveData<UiModel>()
+    var result = MutableLiveData<PukdexResult<List<Pokemon>>>()
 
-    fun fetchPokemonList(page: Int, isLoading: Boolean = true, isLoadMore: Boolean = false) {
+    fun fetchPokemonList(page: Int, isLoading: Boolean = true) {
         liveOnUICoroutines {
-            emitUiState(showLoading = isLoading, showLoadMore = isLoadMore)
+            result.value = PukdexResult.Success(isShowLoading = isLoading)
             mainRepository.fetchPokemonList(page, onSuccess = {
             }, onError = { msg ->
-                emitUiState(showLoading = false, showLoadMore = isLoadMore, showError = msg)
+                result.value = PukdexResult.Error(errorMsgs = msg)
             }).collect { value: List<Pokemon> ->
-                emitUiState(showLoading = false, showLoadMore = isLoadMore, showSuccess = value)
+                result.value = PukdexResult.Success(
+                    success = value,
+                    isShowLoading = false
+                )
             }
         }
     }
-
-    private fun emitUiState(
-        showLoading: Boolean = false,
-        showError: String? = null,
-        showSuccess: List<Pokemon>? = null,
-        showLoadMore: Boolean = false,
-        showRefresh: Boolean = false,
-        needLogin: Boolean? = null
-    ) {
-        val uiModel =
-            UiModel(showLoading, showError, showSuccess, showLoadMore, showRefresh, needLogin)
-        uiState.postValue(uiModel)
-    }
-
-
-    data class UiModel(
-        val showLoading: Boolean,
-        val showError: String?,
-        val showSuccess: List<Pokemon>?,
-        val showLoadMore: Boolean,
-        val showRefresh: Boolean,
-        val needLogin: Boolean? = null
-    )
 }
