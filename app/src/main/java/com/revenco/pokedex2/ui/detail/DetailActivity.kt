@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,21 +40,20 @@ class DetailActivity : TransformationAppCompatActivity() {
         pokemon?.also {
             Glide.with(this).load(it.getImageUrl()).into(detailHeadPokdexImage)
             Glide.with(this).load(it.getImageUrl())
-                .listener(glidePalette(it))
+                .listener(glidePaletteListener(it))
                 .into(detailHeadPokdexImage)
             detailMiddleNameText.text = it.name
             detailViewModel.fetchPokemonInfo(it.name)
         }
         detailViewModel.resultLiveData.whatIfNotNull {
             it.observe(this,
-                Observer<PukdexResult<PokemonInfo>?> { result ->
+                Observer<PukdexResult<PokemonInfo>> { result ->
                     isShowLoading(result)
-                    when (result) {
-                        is PukdexResult.Success -> {
-                            loadDataToLayout(result)
-                        }
-                        is PukdexResult.Error -> {
-                        }
+                    result.successResult?.also { pokemonInfo ->
+                        loadDataToLayout(pokemonInfo)
+                    }
+                    result?.ErrorMsg?.also {
+                        Log.i("DetailActivity-异常->", it)
                     }
                 })
         }
@@ -67,33 +67,31 @@ class DetailActivity : TransformationAppCompatActivity() {
             })
     }
 
-    private fun loadDataToLayout(result: PukdexResult.Success<PokemonInfo>) {
-        result.successResult.whatIfNotNull {
-            detailMiddleWeightText.text = it.getWeightString()
-            detailMiddleHeightText.text = it.getHeightString()
-            detailMiddleRecycler.adapter =
-                DetailMiddleRecyclerAdapter(it.types)
-            detailBottomHPPV.apply {
-                max = maxHp.toFloat()
-                progress = it.hp.toFloat()
-                labelText = it.getHpString()
-            }
-            detailBottomATKPV.apply {
-                max = maxAttack.toFloat()
-                progress = it.attack.toFloat()
-                labelText = it.getAttackString()
-            }
-            detailBottomDEFPV.apply {
-                max = maxDefense.toFloat()
-                progress = it.defense.toFloat()
-                labelText = it.getDefenseString()
-            }
+    private fun loadDataToLayout(result: PokemonInfo) {
+        detailMiddleWeightText.text = result.getWeightString()
+        detailMiddleHeightText.text = result.getHeightString()
+        detailMiddleRecycler.adapter =
+            DetailMiddleRecyclerAdapter(result.types)
+        detailBottomHPPV.apply {
+            max = maxHp.toFloat()
+            progress = result.hp.toFloat()
+            labelText = result.getHpString()
+        }
+        detailBottomATKPV.apply {
+            max = maxAttack.toFloat()
+            progress = result.attack.toFloat()
+            labelText = result.getAttackString()
+        }
+        detailBottomDEFPV.apply {
+            max = maxDefense.toFloat()
+            progress = result.defense.toFloat()
+            labelText = result.getDefenseString()
+        }
 
-            detailBottomSPDPV.apply {
-                max = maxSpeed.toFloat()
-                progress = it.speed.toFloat()
-                labelText = it.getSpeedString()
-            }
+        detailBottomSPDPV.apply {
+            max = maxSpeed.toFloat()
+            progress = result.speed.toFloat()
+            labelText = result.getSpeedString()
         }
     }
 
@@ -111,7 +109,7 @@ class DetailActivity : TransformationAppCompatActivity() {
         }
     }
 
-    private fun glidePalette(it: Pokemon) =
+    private fun glidePaletteListener(it: Pokemon) =
         GlidePalette.with(it.getImageUrl())
             .use(BitmapPalette.Profile.MUTED_LIGHT)
             .intoCallBack { palette ->

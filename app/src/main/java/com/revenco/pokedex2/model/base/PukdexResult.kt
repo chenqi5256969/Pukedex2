@@ -10,12 +10,16 @@ sealed class PukdexResult<out T : Any>(
     val ErrorCode: Int? = 9999, val ErrorMsg: String? = null,
     val successResult: T? = null
 ) {
+
+    data class Loading(
+        private val isShowLoading: Boolean = false
+    ) : PukdexResult<Nothing>(
+        ShowLoading = isShowLoading
+    )
+
     data class Success<out T : Any>(
-        private val success: T? = null,
-        private val isShowLoading: Boolean = false,
-        private val isShowLoadMore: Boolean = false
+        private val success: T? = null
     ) : PukdexResult<T>(
-        ShowLoading = isShowLoading,
         successResult = success
     )
 

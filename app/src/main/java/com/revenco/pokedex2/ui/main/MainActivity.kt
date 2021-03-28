@@ -1,6 +1,7 @@
 package com.revenco.pokedex2.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
     private var page: Int = 0
 
+    private var isLoadMore = false
+
     private val mainRA: MainRecyclerAdapter by lazy {
         MainRecyclerAdapter()
     }
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        loadData()
     }
 
     private fun initView() {
@@ -50,46 +54,45 @@ class MainActivity : AppCompatActivity() {
             loadMoreModule.setOnLoadMoreListener(loadMoreListener)
             setOnItemClickListener(recyclerViewItemClick)
         }
-        mainViewModel.apply {
-            fetchPokemonList(page = 0, isLoading = true)
-            resultLiveData.observe(this@MainActivity, resultObserver)
-        }
+
         mainSwipeRefresh.setOnRefreshListener {
             isLoadMore = false
             mainViewModel.fetchPokemonList(0)
         }
     }
 
-    private var isLoadMore = false
+    private fun loadData() {
+        mainViewModel.apply {
+            fetchPokemonList(page = 0, isLoading = true)
+            resultLiveData.observe(this@MainActivity, resultObserver)
+        }
+    }
+
+
     private val loadMoreListener =
         OnLoadMoreListener {
             isLoadMore = true
-            mainViewModel.fetchPokemonList(page = page, isLoading = false)
+            mainViewModel.fetchPokemonList(page = page)
         }
 
-    private val resultObserver = Observer<PukdexResult<List<Pokemon>>?> { result ->
+    private val resultObserver = Observer<PukdexResult<List<Pokemon>>> { result ->
         mainSwipeRefresh.isRefreshing = result?.ShowLoading ?: false
-        when (result) {
-            is PukdexResult.Success -> {
-                result.successResult?.let { data ->
-                    if (data.isNullOrEmpty()) {
-                        mainRA.loadMoreModule.loadMoreEnd()
-                    } else {
-                        if (isLoadMore) {
-                            mainRA.addData(data)
-                            mainRA.loadMoreModule.loadMoreComplete()
-                        } else {
-                            mainRA.setList(data)
-                        }
-                        page++
-                    }
+        result.successResult?.let { data ->
+            if (data.isNullOrEmpty()) {
+                mainRA.loadMoreModule.loadMoreEnd()
+            } else {
+                if (isLoadMore) {
+                    mainRA.addData(data)
+                    mainRA.loadMoreModule.loadMoreComplete()
+                } else {
+                    mainRA.setList(data)
                 }
+                page++
             }
-            is PukdexResult.Error -> {
-                result.ErrorMsg?.let {
-                    mainRA.loadMoreModule.loadMoreFail()
-                }
-            }
+        }
+        result.ErrorMsg?.let {
+            mainRA.loadMoreModule.loadMoreFail()
+            Log.i("MainActivity-异常->", it)
         }
     }
 

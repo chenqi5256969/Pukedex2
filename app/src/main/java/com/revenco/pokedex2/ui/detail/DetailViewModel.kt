@@ -18,13 +18,12 @@ class DetailViewModel @ViewModelInject constructor(private val detailRepository:
 
     fun fetchPokemonInfo(name: String) {
         liveOnUICoroutines {
-            resultLiveData.value = PukdexResult.Success(isShowLoading = true)
-            detailRepository.fetchPokemonInfo(name,  onError = { msg ->
+            resultLiveData.value = PukdexResult.Loading(isShowLoading = true)
+            detailRepository.fetchPokemonInfo(name, onError = { msg ->
                 resultLiveData.value = PukdexResult.Error(errorMsgs = msg)
             }).collect { value: PokemonInfo ->
                 resultLiveData.value = PukdexResult.Success(
-                    success = value,
-                    isShowLoading = false
+                    success = value
                 )
             }
         }

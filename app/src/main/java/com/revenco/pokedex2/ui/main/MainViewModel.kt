@@ -18,13 +18,12 @@ class MainViewModel @ViewModelInject constructor(
 
     fun fetchPokemonList(page: Int, isLoading: Boolean = true) {
         liveOnUICoroutines {
-            resultLiveData.value = PukdexResult.Success(isShowLoading = isLoading)
+            resultLiveData.value = PukdexResult.Loading(isShowLoading = isLoading)
             mainRepository.fetchPokemonList(page, onError = { msg ->
                 resultLiveData.value = PukdexResult.Error(errorMsgs = msg)
             }).collect { value: List<Pokemon> ->
                 resultLiveData.value = PukdexResult.Success(
-                    success = value,
-                    isShowLoading = false
+                    success = value
                 )
             }
         }
