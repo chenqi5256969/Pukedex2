@@ -21,15 +21,12 @@ open class BaseRepository {
         errorCallBack: (message: String) -> Unit
     ) {
         response.suspendOnSuccess {
-            Log.i("onError--->", "safeHandleResult-suspendOnSuccess")
             successCallBack(this)
         }.onError {
-            Log.i("onError--->", "safeHandleResult-onError")
             CoroutineScope(Dispatchers.Main).launch {
                 errorCallBack(message())
             }
         }.onException {
-            Log.i("onError--->", "safeHandleResult-onException")
             CoroutineScope(Dispatchers.Main).launch {
                 errorCallBack(message())
             }

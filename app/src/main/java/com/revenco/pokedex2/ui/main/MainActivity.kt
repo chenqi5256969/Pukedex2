@@ -1,35 +1,23 @@
 package com.revenco.pokedex2.ui.main
 
 import android.os.Bundle
-import android.util.Log
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.util.Executors
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
-import com.chad.library.adapter.base.loadmore.LoadMoreStatus
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
-import com.revenco.pokedex2.PokedexApp
 import com.revenco.pokedex2.R
-import com.revenco.pokedex2.base.LiveCoroutinesViewModel
 import com.revenco.pokedex2.model.Pokemon
-import com.revenco.pokedex2.model.PokemonResponse
 import com.revenco.pokedex2.model.base.PukdexResult
 import com.revenco.pokedex2.ui.adapter.MainRecyclerAdapter
 import com.revenco.pokedex2.ui.detail.DetailActivity
-import com.skydoves.transformationlayout.TransformationActivity
-import com.skydoves.transformationlayout.TransformationAppCompatActivity
-import com.skydoves.transformationlayout.TransformationCompat.onTransformationStartContainer
 import com.skydoves.transformationlayout.TransformationLayout
 import com.skydoves.transformationlayout.onTransformationStartContainer
 import com.skydoves.whatif.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
-import kotlin.concurrent.thread
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint

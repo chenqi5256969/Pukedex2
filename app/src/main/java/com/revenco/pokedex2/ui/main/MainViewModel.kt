@@ -1,16 +1,13 @@
 package com.revenco.pokedex2.ui.main
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.revenco.pokedex2.base.LiveCoroutinesViewModel
 import com.revenco.pokedex2.model.Pokemon
 import com.revenco.pokedex2.model.base.PukdexResult
 import com.revenco.pokedex2.repository.MainRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
 
 @ExperimentalCoroutinesApi
 class MainViewModel @ViewModelInject constructor(

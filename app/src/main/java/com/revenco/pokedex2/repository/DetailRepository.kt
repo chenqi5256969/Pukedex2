@@ -16,30 +16,25 @@ import javax.inject.Inject
 class DetailRepository @Inject constructor(
     private val client: PokedexClient,
     private val infoDao: PokemonInfoDao
-) {
+) : BaseRepository() {
     suspend fun fetchPokemonInfo(
         name: String,
-        onSuccess: () -> Unit,
         onError: (msg: String) -> Unit
     ) =
         flow<PokemonInfo> {
             val pokemonInfo = infoDao.getPokemonInfo(name)
             if (pokemonInfo == null) {
                 val response = client.fetchPokemonInfo(name)
-                response.suspendOnSuccess {
+                safeHandleResult(response, successCallBack = { data ->
                     data.whatIfNotNull { response ->
-                        infoDao.insertPokemonInfo(response)
-                        emit(response)
-                        onSuccess()
+                        infoDao.insertPokemonInfo(data.data!!)
+                        emit(data.data!!)
                     }
-                }.onError {
-                    onError(message())
-                }.onException {
-                    onError(message())
-                }
+                }, errorCallBack = { error ->
+                    onError(error)
+                })
             } else {
                 emit(pokemonInfo)
-                onSuccess()
             }
         }.flowOn(Dispatchers.IO)
 
