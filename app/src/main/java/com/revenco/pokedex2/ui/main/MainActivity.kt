@@ -10,11 +10,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.util.Executors
 import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
+import com.chad.library.adapter.base.loadmore.LoadMoreStatus
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView
 import com.revenco.pokedex2.PokedexApp
 import com.revenco.pokedex2.R
 import com.revenco.pokedex2.base.LiveCoroutinesViewModel
 import com.revenco.pokedex2.model.Pokemon
+import com.revenco.pokedex2.model.PokemonResponse
 import com.revenco.pokedex2.model.base.PukdexResult
 import com.revenco.pokedex2.ui.adapter.MainRecyclerAdapter
 import com.revenco.pokedex2.ui.detail.DetailActivity
@@ -26,12 +28,10 @@ import com.skydoves.transformationlayout.onTransformationStartContainer
 import com.skydoves.whatif.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Runnable
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.concurrent.thread
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
@@ -59,31 +59,49 @@ class MainActivity : AppCompatActivity() {
         }
         mainRA.apply {
             loadMoreModule.loadMoreView = SimpleLoadMoreView()
-            loadMoreModule.setOnLoadMoreListener(loadMore)
+            loadMoreModule.setOnLoadMoreListener(loadMoreListener)
             setOnItemClickListener(recyclerViewItemClick)
         }
         mainViewModel.apply {
             fetchPokemonList(page = 0, isLoading = true)
-            result.observe(this@MainActivity, resultObserver)
+            resultLiveData.observe(this@MainActivity, resultObserver)
         }
-        mainSwipeRefresh.setOnRefreshListener { mainViewModel.fetchPokemonList(0) }
+        mainSwipeRefresh.setOnRefreshListener {
+            isLoadMore = false
+            mainViewModel.fetchPokemonList(0)
+        }
     }
 
-    private val loadMore =
-        OnLoadMoreListener { mainViewModel.fetchPokemonList(page = page, isLoading = false) }
+    private var isLoadMore = false
+    private val loadMoreListener =
+        OnLoadMoreListener {
+            isLoadMore = true
+            mainViewModel.fetchPokemonList(page = page, isLoading = false)
+        }
 
     private val resultObserver = Observer<PukdexResult<List<Pokemon>>?> { result ->
         mainSwipeRefresh.isRefreshing = result?.ShowLoading ?: false
-        result?.successResult?.let { data ->
-            if (data.isNullOrEmpty()) {
-                mainRA.loadMoreModule.loadMoreEnd()
-            } else {
-                mainRA.addData(data)
-                mainRA.loadMoreModule.loadMoreComplete()
-                page++
+        when (result) {
+            is PukdexResult.Success -> {
+                result.successResult?.let { data ->
+                    if (data.isNullOrEmpty()) {
+                        mainRA.loadMoreModule.loadMoreEnd()
+                    } else {
+                        if (isLoadMore) {
+                            mainRA.addData(data)
+                            mainRA.loadMoreModule.loadMoreComplete()
+                        } else {
+                            mainRA.setList(data)
+                        }
+                        page++
+                    }
+                }
             }
-        }
-        result?.ErrorMsg?.let {
+            is PukdexResult.Error -> {
+                result.ErrorMsg?.let {
+                    mainRA.loadMoreModule.loadMoreFail()
+                }
+            }
         }
     }
 

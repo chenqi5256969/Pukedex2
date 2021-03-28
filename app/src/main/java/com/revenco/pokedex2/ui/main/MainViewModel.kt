@@ -17,16 +17,15 @@ class MainViewModel @ViewModelInject constructor(
     private val mainRepository: MainRepository
 ) : LiveCoroutinesViewModel() {
 
-    var result = MutableLiveData<PukdexResult<List<Pokemon>>>()
+    var resultLiveData = MutableLiveData<PukdexResult<List<Pokemon>>>()
 
     fun fetchPokemonList(page: Int, isLoading: Boolean = true) {
         liveOnUICoroutines {
-            result.value = PukdexResult.Success(isShowLoading = isLoading)
-            mainRepository.fetchPokemonList(page, onSuccess = {
-            }, onError = { msg ->
-                result.value = PukdexResult.Error(errorMsgs = msg)
+            resultLiveData.value = PukdexResult.Success(isShowLoading = isLoading)
+            mainRepository.fetchPokemonList(page, onError = { msg ->
+                resultLiveData.value = PukdexResult.Error(errorMsgs = msg)
             }).collect { value: List<Pokemon> ->
-                result.value = PukdexResult.Success(
+                resultLiveData.value = PukdexResult.Success(
                     success = value,
                     isShowLoading = false
                 )

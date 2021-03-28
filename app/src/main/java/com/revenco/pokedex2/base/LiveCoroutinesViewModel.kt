@@ -13,7 +13,6 @@ abstract class LiveCoroutinesViewModel : ViewModel() {
     inline fun liveOnUICoroutines(crossinline block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(Dispatchers.Main)
         {
-
             block()
         }
     }

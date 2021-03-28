@@ -7,7 +7,7 @@ package com.revenco.pokedex2.model.base
  */
 sealed class PukdexResult<out T : Any>(
     val ShowLoading: Boolean = false,
-    val ErrorCode: Int = 1111, val ErrorMsg: String = "",
+    val ErrorCode: Int? =9999, val ErrorMsg: String ?= null,
     val successResult: T? = null
 ) {
     data class Success<out T : Any>(
@@ -19,6 +19,6 @@ sealed class PukdexResult<out T : Any>(
         successResult = success
     )
 
-      data class Error(val errorCodes: Int = 9999, val errorMsgs: String = "") :
+      data class Error(val errorCodes: Int = 9999, val errorMsgs: String? = null) :
         PukdexResult<Nothing>(ErrorCode = errorCodes, ErrorMsg = errorMsgs)
 }

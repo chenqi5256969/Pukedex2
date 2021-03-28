@@ -14,5 +14,5 @@ interface PokemonDao {
     suspend fun insertPokemonList(pokemonInfo: List<Pokemon>)
 
     @Query("select * from Pokemon where page=:page")
-    suspend fun getPokemonList(page: Int): List<Pokemon>
+    suspend fun getPokemonList(page: Int): List<Pokemon>?
 }
