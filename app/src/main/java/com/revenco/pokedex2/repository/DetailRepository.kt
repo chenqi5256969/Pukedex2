@@ -3,13 +3,10 @@ package com.revenco.pokedex2.repository
 import com.revenco.pokedex2.model.PokemonInfo
 import com.revenco.pokedex2.network.PokedexClient
 import com.revenco.pokedex2.persistence.PokemonInfoDao
-import com.skydoves.sandwich.*
 import com.skydoves.whatif.whatIfNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import okhttp3.Dispatcher
-import okhttp3.OkHttpClient
 import javax.inject.Inject
 
 

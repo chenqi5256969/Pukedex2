@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Pokedex2</string>
+    <string name="_004">#004</string>
+    <string name="pokedex">Pokedex</string>
 </resources>

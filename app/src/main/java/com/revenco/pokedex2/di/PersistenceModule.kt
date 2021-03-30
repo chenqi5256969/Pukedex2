@@ -2,7 +2,6 @@ package com.revenco.pokedex2.di
 
 import android.app.Application
 import androidx.room.Room
-import com.revenco.pokedex2.model.PokemonInfo
 import com.revenco.pokedex2.persistence.AppDatabase
 import com.revenco.pokedex2.persistence.PokemonDao
 import com.revenco.pokedex2.persistence.PokemonInfoDao

@@ -3,7 +3,6 @@ package com.revenco.pokedex2.ui.adapter
 
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule

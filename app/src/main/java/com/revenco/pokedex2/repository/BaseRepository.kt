@@ -1,11 +1,8 @@
 package com.revenco.pokedex2.repository
 
-import android.util.Log
-import com.revenco.pokedex2.model.base.PukdexResult
 import com.skydoves.sandwich.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 /**

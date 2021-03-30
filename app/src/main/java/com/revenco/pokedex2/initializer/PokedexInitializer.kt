@@ -2,10 +2,7 @@ package com.revenco.pokedex2.initializer
 
 import android.content.Context
 import android.util.Log
-import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.startup.Initializer
-import com.revenco.pokedex2.PokedexApp
 
 /**
  * 谷歌推出的app异步启动优化方案，避免在application中初始化太多东西导致app启动太慢

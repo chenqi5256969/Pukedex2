@@ -2,7 +2,6 @@ package com.revenco.pokedex2.persistence
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.revenco.pokedex2.model.Pokemon
 import com.revenco.pokedex2.model.PokemonInfo

@@ -1,6 +1,5 @@
 package com.revenco.pokedex2.di
 
-import com.revenco.pokedex2.PokedexApp
 import com.revenco.pokedex2.network.PokedexClient
 import com.revenco.pokedex2.persistence.PokemonDao
 import com.revenco.pokedex2.persistence.PokemonInfoDao

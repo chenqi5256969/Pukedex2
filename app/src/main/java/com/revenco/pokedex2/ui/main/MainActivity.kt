@@ -1,7 +1,6 @@
 package com.revenco.pokedex2.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.GridLayoutManager
@@ -92,7 +91,6 @@ class MainActivity : AppCompatActivity() {
         }
         result.ErrorMsg?.let {
             mainRA.loadMoreModule.loadMoreFail()
-            Log.i("MainActivity-异常->", it)
         }
     }
 

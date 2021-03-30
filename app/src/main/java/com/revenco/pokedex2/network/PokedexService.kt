@@ -3,9 +3,9 @@ package com.revenco.pokedex2.network
 import com.revenco.pokedex2.model.PokemonInfo
 import com.revenco.pokedex2.model.PokemonResponse
 import com.skydoves.sandwich.ApiResponse
-import com.skydoves.sandwich.ResponseDataSource
-import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface PokedexService {
 

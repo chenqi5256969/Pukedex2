@@ -1,6 +1,5 @@
 package com.revenco.pokedex2.ui.adapter
 
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter

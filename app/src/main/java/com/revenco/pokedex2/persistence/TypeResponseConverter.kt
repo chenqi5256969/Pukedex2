@@ -5,8 +5,6 @@ import com.revenco.pokedex2.model.PokemonInfo
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import org.json.JSONArray
-import org.json.JSONObject
 
 
 object TypeResponseConverter {

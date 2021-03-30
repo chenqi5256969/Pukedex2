@@ -1,7 +1,6 @@
 package com.revenco.pokedex2.utils
 
 import android.graphics.Color
-import com.revenco.pokedex2.R
 
 
 object PokemonTypeUtils {
