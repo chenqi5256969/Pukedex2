@@ -6,6 +6,20 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
+    Properties properties = new Properties()
+    properties.load project.rootProject.file('local.properties').newDataInputStream()
+    def pukedexFile = properties.getProperty("storeFile")
+    def pukedexPassword = properties.getProperty("storePassword")
+    def pukedexKeyPassword = properties.getProperty("keyPassword")
+    def pukedexKeyAlias = properties.getProperty("keyAlias")
+    signingConfigs {
+        Pukedex {
+            storeFile file("${pukedexFile}")
+            storePassword "${pukedexPassword}"
+            keyPassword "${pukedexKeyPassword}"
+            keyAlias "${pukedexKeyAlias}"
+        }
+    }
     compileSdkVersion versions.compileSdkVersion
     buildToolsVersion "29.0.3"
 
@@ -20,6 +34,12 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.Pukedex
+        }
+
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -37,7 +57,7 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude("META-INF/*.kotlin_module")
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
