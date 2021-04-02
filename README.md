@@ -2,7 +2,7 @@
 一款神奇宝贝信息查看app
 #### 帮助自己更好的了解架构组件和协程的使用：
 
-apk下载地址：![](https://github.com/chenqi5256969/Pukedex2/blob/master/apk/app-debug.apk)
+apk下载地址：(https://github.com/chenqi5256969/Pukedex2/blob/master/apk/app-debug.apk)
 协程这一块主要是用到flow来更好进行流式调用，后续会改成谷歌在文档中推荐的MutableStateFlow
 
 #### 采坑日志：
