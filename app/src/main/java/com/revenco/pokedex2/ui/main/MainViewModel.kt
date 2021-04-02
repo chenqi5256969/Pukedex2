@@ -7,6 +7,7 @@ import com.revenco.pokedex2.model.Pokemon
 import com.revenco.pokedex2.model.base.PukdexResult
 import com.revenco.pokedex2.repository.MainRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalCoroutinesApi
